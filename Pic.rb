@@ -1,3 +1,4 @@
+# coding: utf-8
 Pix = Struct.new(:r,:g,:b)
 Point = Struct.new(:x,:y)
 Line = Struct.new(:a,:b)
@@ -48,19 +49,20 @@ def linegragh(p1,p2)
   end
 end
 
-#右:2、下:1
-def make_line(img,point1,point2,t,pix)
-  if (linegragh(point1,point2).a != 0) then
-    for x in 0..($size[0]-1) do
-      for y in 0..($size[0]-1) do
-        if (point1.x >= x)==(point2.x <= x) then
-          pixset(img,x,(linegragh(point1,point2).a * x + linegragh(point1,point2).b).to_i,t,pix)
+def make_line(img,point1,point2,leng,t,pix)
+  for k in 0..(leng - 1) do
+    if ( linegragh(point1,point2).a != 0) then
+      for x in 0..($size[0]-1) do
+        for y in 0..($size[0]-1) do
+          if (point1.x >= x)==(point2.x <= x) then
+            pixset(img,x,( linegragh(point1,point2).a * x + linegragh(point1,point2).b).to_i + k,t,pix)
+          end
         end
       end
-    end
-  else
-    for y in 0..($size[0]-1) do
-      pixset(img,linegraph(point1,point2).b,y,t,pix)
+    else
+      for y in 0..($size[0]-1) do
+        pixset(img,linegragh(point1,point2).b + k,y,t,pix)
+      end
     end
   end
 end
@@ -121,11 +123,55 @@ def make_poly(img,points,t,pix)
   end
 end
 
-init(300,300)
-make_circle($img,Point.new(150,100),50,0.3,$redpix)
-$tri = [Point.new(10,10),Point.new(150,250),Point.new(250,150)]
-make_tri($img,$tri,0.3,$bluepix)
-make_line($img,Point.new(50,50),Point.new(200,100),0.9,$greenpix)
-$poly = [Point.new(10,10),Point.new(100,50),Point.new(180,100),Point.new(220,200),Point.new(100,200)]
-make_poly($img,$poly,0.3,$graypix)
+def make_gradate(img,point,xlength,ylength,type,pix)
+  for x in (point.x)..(point.x + xlength) do
+    for y in (point.y)..(point.y + ylength) do
+      if type == "x" then
+        pixset(img,x,y,((x - point.x).to_f/xlength).to_f,pix)
+      else
+        pixset(img,x,y,((y - point.y).to_f/ylength).to_f,pix)
+      end
+    end
+  end
+end
+
+def gradatemot(img,point,xlength,ylength,type,t)
+  
+  for x in (point.x)..(point.x + xlength) do
+    for y in (point.y)..(point.y + ylength) do
+      if type == "x" then
+        t1 = ((x - point.x).to_f/xlength).to_f
+      elsif type == "-x" then
+        t1 = -((x - point.x).to_f/xlength).to_f
+      elsif type == "y" then
+        t1 = ((y - point.y).to_f/ylength).to_f
+      else
+        t1 = -((y - point.y).to_f/ylength).to_f
+      end
+      if 0 <= x && x < $size[0] && 0 <= y && y < $size[1] then
+        img[x][y].r = (255 - (255 - img[x][y].r) * t1 * t).to_i
+        img[x][y].g = (255 - (255 - img[x][y].g) * t1 * t).to_i
+        img[x][y].b = (255 - (255 - img[x][y].b) * t1 * t).to_i
+      end
+    end
+  end
+  
+end
+
+init(600,400)
+make_gradate($img,Point.new(0,0),$size[0],$size[1],"y",$greenpix)
+$poly1 = [Point.new(0,100),Point.new(0,300),Point.new(100,400),Point.new(200,200),Point.new(100,0)]
+$poly2 = [Point.new(600,100),Point.new(600,300),Point.new(500,400),Point.new(400,200),Point.new(500,0)]
+make_poly($img,$poly1,0.3,$bluepix)
+make_poly($img,$poly2,0.3,$bluepix)
+make_circle($img,Point.new(300,200),100,0.3,$redpix)
+gradatemot($img,Point.new(0,0),$size[0],$size[1],"x",0.5)
+
+#for x in 0..($size[0]-1) do
+#  for y in 0..($size[1]-1) do
+#    make_line($img,Point.new(2*x,0),Point.new(0,y),1,0.1,$bluepix)
+#    make_line($img,Point.new(x,0),Point.new(0,3*y),1,0.1,$greenpix)
+#  end
+#end
+
 filewrite("t.ppm",$img)
