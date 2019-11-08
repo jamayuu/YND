@@ -53,14 +53,14 @@ def make_line(img,point1,point2,leng,t,pix)
   for k in 0..(leng - 1) do
     if ( linegragh(point1,point2).a != 0) then
       for x in 0..($size[0]-1) do
-        for y in 0..($size[0]-1) do
+        for y in 0..($size[1]-1) do
           if (point1.x >= x)==(point2.x <= x) then
             pixset(img,x,( linegragh(point1,point2).a * x + linegragh(point1,point2).b).to_i + k,t,pix)
           end
         end
       end
     else
-      for y in 0..($size[0]-1) do
+      for y in 0..($size[1]-1) do
         pixset(img,linegragh(point1,point2).b + k,y,t,pix)
       end
     end
@@ -136,7 +136,7 @@ def make_gradate(img,point,xlength,ylength,type,pix)
 end
 
 def gradatemot(img,point,xlength,ylength,type,t)
-  
+
   for x in (point.x)..(point.x + xlength) do
     for y in (point.y)..(point.y + ylength) do
       if type == "x" then
@@ -155,23 +155,16 @@ def gradatemot(img,point,xlength,ylength,type,t)
       end
     end
   end
-  
 end
 
-init(600,400)
-make_gradate($img,Point.new(0,0),$size[0],$size[1],"y",$greenpix)
-$poly1 = [Point.new(0,100),Point.new(0,300),Point.new(100,400),Point.new(200,200),Point.new(100,0)]
-$poly2 = [Point.new(600,100),Point.new(600,300),Point.new(500,400),Point.new(400,200),Point.new(500,0)]
-make_poly($img,$poly1,0.3,$bluepix)
-make_poly($img,$poly2,0.3,$bluepix)
-make_circle($img,Point.new(300,200),100,0.3,$redpix)
-gradatemot($img,Point.new(0,0),$size[0],$size[1],"x",0.5)
-
-#for x in 0..($size[0]-1) do
-#  for y in 0..($size[1]-1) do
-#    make_line($img,Point.new(2*x,0),Point.new(0,y),1,0.1,$bluepix)
-#    make_line($img,Point.new(x,0),Point.new(0,3*y),1,0.1,$greenpix)
-#  end
-#end
-
-filewrite("t.ppm",$img)
+#init(600,400)
+#make_gradate($img,Point.new(0,0),$size[0],$size[1],"y",$greenpix)
+#$poly1 = [Point.new(0,100),Point.new(0,300),Point.new(100,400),Point.new(200,200),Point.new(100,0)]
+#$poly2 = [Point.new(600,100),Point.new(600,300),Point.new(500,400),Point.new(400,200),Point.new(500,0)]
+#make_poly($img,$poly1,0.3,$bluepix)
+#make_poly($img,$poly2,0.3,$bluepix)
+#make_circle($img,Point.new(300,200),100,0.3,$redpix)
+#gradatemot($img,Point.new(0,0),$size[0],$size[1],"x",0.5)
+#make_line($img,Point.new(2,0),Point.new(200,100),10,0.1,$bluepix)
+#make_line($img,Point.new(200,0),Point.new(0,200),5,0.1,$greenpix)
+#filewrite("t.ppm",$img)
