@@ -61,3 +61,27 @@ int main(void){
   }
   return 0;
 }
+/*
+実行例
+input length:8
+input array:1 5 7 2 6 3 4 9         
+Answer:5
+Answer Array:1 2 3 4 9 
+
+input length:4
+input array:1 5 6 8
+Answer:4
+Answer Array:1 5 6 8 
+
+input length:4 
+input array:5 2 6 9
+Answer:3
+Answer Array:5 6 9 
+
+input length:30
+input array:1 3 5 6 7 2 5 32 7 2 6 2 4 6 2 23 56 2 7 3 36 2 5 6 34 12 51 521 12 12    
+Answer:9
+Answer Array:1 3 5 6 7 32 36 51 521 
+
+input length:0
+*/
