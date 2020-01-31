@@ -1,0 +1,54 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#define MAX 100
+
+//気合いで手動で足し算する
+
+//文字列(10005とか)のn桁目の数字を返す。(0桁目から)
+//もし、10005とかで6桁目とか5桁目などのないところを参照した場合0を返す。
+int ret(char ary[],int n){
+  if(n >= strlen(ary))return 0;
+  char num = ary[strlen(ary) - n - 1];
+  return atoi(&num);
+}
+
+//擬似的に筆算を行う。countが桁数、ans配列にary1とary2の足し算の結果を入れる
+//rankupは桁が繰り上がる場合に1、そうでない場合に0で行う。
+//最終的に一番上の桁が繰り上がるかどうかが返る。
+int add(char ans[],char ary1[],char ary2[],int count,int rankup,int limit){
+  if(count == limit){
+    ans[limit] = '\0';
+    return rankup;
+  }
+  int all = ret(ary1,count) + ret(ary2,count) + rankup;
+  char ret[2];
+  if(all >= 10){
+    sprintf(ret,"%d",(all - 10));
+    ans[limit - count - 1] = ret[0];
+    return add(ans,ary1,ary2,count + 1,1,limit);
+  }else{
+    sprintf(ret,"%d",all);
+    ans[limit - count - 1] = ret[0];
+    return add(ans,ary1,ary2,count + 1,0,limit);
+  }
+}
+
+
+//与えられた数に対して桁数の大きい方の桁数+1の長さの文字列ansを作る。
+//addの返り値で繰り上がりがわかるので、必要に応じて一番上に1をつける。
+int main(int argc, char *argv[]){
+  char *ans;
+  int maxleng = (strlen(argv[1]) > strlen(argv[2]))? strlen(argv[1]) : strlen(argv[2]);
+	ans = (char *)malloc(sizeof(char) * (maxleng + 1));
+  char ret[MAX];
+  if(add(ans,argv[1],argv[2],0,0,maxleng)){
+    sprintf(ret,"%d%s",1,ans);
+  }else{
+    sprintf(ret,"%s",ans);
+  }
+  printf("%s\n",ret);
+  free(ans);
+  return 0;
+}
